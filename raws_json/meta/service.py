@@ -16,7 +16,7 @@
 # limitations under the License.import os
 import json
 import raws_json
-from raws_json.raws_service import RawsService
+from raws_json.raws_service import RawsService, Query
 
 class MetaService(RawsService):
 
