@@ -155,6 +155,7 @@ class MetaService(RawsService):
         if not_if_exists:
             query = Query()
             query["check_cdn"] = "1"
+            query.feed = uri
             uri = query.ToUri()
         return self.Delete(uri = uri)
 
