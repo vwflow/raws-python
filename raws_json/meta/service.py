@@ -109,7 +109,7 @@ class MetaService(RawsService):
             uri = query.ToUri()
         return self.Get(uri = uri)
 
-    def deleteContentDir(self, dirpath = None):
+    def deleteContentDir(self, dirpath = None, not_if_exists = False):
         """ Delete (recursively) all META file or/and content instances that are located under a given directory.
         
             This method deletes all file instances from inside this directory and sub-directories.
@@ -117,8 +117,13 @@ class MetaService(RawsService):
             Note that only metadata is deleted, use RassService.deleteDir() to delete the files from the CDN.
             
             @param string Relative path to the directory from which to delete.
+            @param bool If True, the META service will only delete file/content instances if the directory doesn't exist on the CDN.
         """
         uri = "/contentdir/" + self.username + "/" + dirpath.lstrip("/")
+        if not_if_exists:
+            query = Query()
+            query["check_cdn"] = "1"
+            uri = query.ToUri()
         return self.Delete(uri = uri)
 
     # File
@@ -137,15 +142,20 @@ class MetaService(RawsService):
             uri = query.ToUri()
         return self.Get(uri = uri)
     
-    def deleteFile(self, path = None):
+    def deleteFile(self, path = None, not_if_exists = False):
         """ Delete the file instance that has the given path.
 
             If this causes a content instance to be no longer attached to a file instance, it is also deleted.
             Note that only metadata is deleted, use RassService.deleteItem() to delete the file from the CDN.
 
             @param string Relative path to the file to be deleted.
+            @param bool If True, the META service will only delete the file instance if it doesn't exist on the CDN.
         """
         uri = "/file/" + self.username + "/" + path.lstrip("/")
+        if not_if_exists:
+            query = Query()
+            query["check_cdn"] = "1"
+            uri = query.ToUri()
         return self.Delete(uri = uri)
 
     
