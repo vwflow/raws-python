@@ -16,12 +16,21 @@
 # limitations under the License.import os
 import json
 import raws_json
-from raws_json.raws_service import RawsService, Query
+from raws_json.raws_service import RawsService, Query, RequestError
 
 class MetaService(RawsService):
 
-    def __init__(self, username=None, password=None, server=None, ssl = False):
+    def __init__(self, username, password, server = None, ssl = False):
+        """ Constructor for MetaService, used to send request to the META service.
+
+        :param username: Name of your Rambla user account
+        :param password: Pwd of your Rambla user account
+        :param server: Domain name of the META service (optional, default = "meta.meta01.rambla.be")
+        :param ssl: Set True to use SSL (your account must be SSL enabled) (optional, default = False)
+        """
         self.username = username
+        if server is None:
+            server = "meta.meta01.rambla.be"
         super(MetaService, self).__init__(username = username, password = password, server = server, ssl = ssl)
 
     def delete(self, uri):
@@ -56,14 +65,26 @@ class MetaService(RawsService):
             uri = query.ToUri()
         return self.Post(entry, uri= uri)
 
-    def deleteContent(self, entry):
+    def deleteContent(self, entry, delete_files_from_cdn = True):
         """ Deletes the content instance that was passed as argument.
 
             @param dict The content entry dict that should be deleted from META.
+            @param delete_files_from_cdn If true, the META service will delete the files attached to the content instance from the CDN.
         """
         name = entry["entry"]["content"]["params"]["name"]
         uri = "/content/" + self.username + "/" + name + "/"
+        if delete_files_from_cdn:
+            query = Query(params = {"sync_cdn":"1"}, feed = uri)
+            uri = query.ToUri()
         return self.Delete(uri = uri)
+        
+    def getContent(self, uri):
+        """ Retrieves a content instance or list (depending on the URI). 
+
+            @param uri GET content URL for your user account.
+            @return List of content dicts or content entry dict
+        """
+        return self.Get(uri = uri)
 
     def getContentList(self, query = None):
         """ Retrieves a content list. 
@@ -220,6 +241,15 @@ class MetaService(RawsService):
         """
         uri = "/vocab/" + self.username + "/" + name + "/"
         return self.Post(entry, uri= uri)
+        
+    def vocabExists(self, name):
+        exists = False
+        try:
+            self.getVocabInstance(name)
+            exists = True
+        except RequestError, e:
+            pass
+        return exists
 
     # GET Ext
     # -------------
@@ -251,7 +281,7 @@ class MetaService(RawsService):
         result_body = server_response.read()
 
         if server_response.status == 200:
-            return result_body
+            return result_body.decode('utf-8') # need to decode explicitly here (happens implicitly when json.loads() is called)
         else:
             raise RequestError, {'status': server_response.status,
               'reason': server_response.reason, 'body': result_body}
@@ -273,7 +303,7 @@ class MetaService(RawsService):
         result_body = server_response.read()
 
         if server_response.status == 200:
-            return result_body
+            return result_body.decode('utf-8') # need to decode explicitly here (happens implicitly when json.loads() is called)
         else:
             raise RequestError, {'status': server_response.status,
               'reason': server_response.reason, 'body': result_body}

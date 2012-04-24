@@ -18,6 +18,15 @@
 class MetaObj(object):
 
     def __init__(self, meta_name = None, vocab = None, text = None, lang = None, attrs = None, meta_dict = None):
+        """ Constructor for the meta property which is part of a content entry.
+        
+        :param meta_name: Name of the metadata property (e.g. 'title')
+        :param vocab: Vocabulary name (e.g. 'media')
+        :param text: Text of the metadata property (e.g. 'Big Buck Bunny')
+        :param lang: Language code (e.g. 'en')
+        :param attrs: Dict containing additional attributes to be set on this property (e.g. {'type':'plain',})
+        :param meta_dict: If set, all other arguments won't be used (the meta_dict will be converted to an object instead).
+        """
         self.clear()
         # if the meta_dict is passed instead of params, use that to populate datamembers
         if meta_dict:
@@ -56,9 +65,12 @@ class MetaObj(object):
 
     def to_dict(self):
         meta_dict = {"vocab":self.vocab, "meta_name":self.meta_name, "text":self.text, "lang":self.lang,}
-        for k,v in self.attrs:
+        for k,v in self.attrs.items():
             meta_dict[k] = v
         return meta_dict
+        
+    def __unicode__(self):
+        return u"%s:%s with text='%s', lang='%s' and attrs=%s" % (self.vocab, self.meta_name, self.text, self.lang, unicode(self.attrs))
     
     def __eq__(self, other):
         if isinstance(other, MetaObj):
@@ -312,6 +324,87 @@ class MetaContent(object):
         entry["entry"]["content"]["file_params"] = {"thumb_used":self.thumb_used,"update_files":self.update_files}
         
         return entry
+
+    def get_tags(self):
+        """ Get all tags.
+        
+        :returns: List of strings (tags)
+        """
+        return self.tags
+
+    def set_tags(self, tags):
+        """ Set all tags (replaces existing ones).
+
+        :param tags: List of strings (tags)
+        """
+        self.tags = tags
+        
+    def add_tag(self, tag):
+        """ Add a single tag. 
+        
+        :param tag: Tag string.
+        """
+        self.tags.append(tag)
+
+    def add_tags(self, tags):
+        """ Add a list of tags. 
+
+        :param tags: List of strings (tags)
+        """
+        self.tags.extend(tags)
+        
+    def get_meta_objs(self):
+        """ Get all meta_objs.
+
+        :returns: List of MetaObj objects
+        """
+        return self.meta_objs
+
+    def set_meta_objs(self, meta_objs):
+        """ Set all meta_objs (replaces existing ones).
+
+        :param meta_objs: List of MetaObj objects
+        """
+        self.meta_objs = meta_objs
+
+    def add_meta_obj(self, meta_name, vocab, text = None, lang = None, attrs = None):
+        """ Add a single meta_obj. 
+        
+        :param meta_name: Name of the metadata property (e.g. 'title')
+        :param vocab: Vocabulary name (e.g. 'media')
+        :param text: Text of the metadata property (e.g. 'Big Buck Bunny')
+        :param lang: Language code (e.g. 'en')
+        :param attrs: Dict containing additional attributes to be set on this property (e.g. {'type':'plain',})
+        """
+        self.meta_objs.append(MetaObj(meta_name = meta_name, vocab = vocab, text = text, lang = lang, attrs = attrs))
+
+    def add_meta_objs(self, meta_objs):
+        """ Add a list of meta_objs. 
+
+        :param meta_objs: List of MetaObj objects.
+        """
+        self.meta_objs.extend(meta_objs)
+        
+    def get_file_objs(self):
+        """ Get all file_objs.
+
+        :returns: List of FileObj objects
+        """
+        return self.file_objs
+
+    def add_file_obj(self, file_obj):
+        """ Add a single file_obj 
+
+        :param file_obj: FileObj object.
+        """
+        self.file_objs.append(file_obj)
+
+    def add_file_objs(self, file_objs):
+        """ Add a list of file_objs. 
+
+        :param file_objs: List of FileObj objects.
+        """
+        self.file_objs.extend(file_objs)
         
     def set_thumb_used(self, thumb_used):
         self.thumb_used = u"/" + thumb_used.lstrip('/').rstrip('/')

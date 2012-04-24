@@ -19,9 +19,37 @@ import raws_json
 from raws_json.raws_service import RawsService
 
 class RatsService(RawsService):
+    
+    ENCODE_MP4_480P_WITH_SNAPSHOTS = "1"  # Encode to mp4 (for online viewing) with same dimensions + make snapshots
+    EXPORT_TO_CDN = "1"                 # Export encoded files to your CDN account
+    
+    MAIL_CDN_REPORT = "13"              # Mail CDN report in JSON format
+    POST_CDN_REPORT = "14"              # Send CDN report as body of HTPP POST request (URL must be specified in client_input param)
+    MAIL_HUMAN_READABLE = "24"          # Send a human readable mail with info about encoding + published files
 
-    def __init__(self, username=None, password=None, server=None, ssl = False):
+    # Jon status codes
+    JOB_RECEIVED = 1
+    JOB_IMPORTING = 2
+    JOB_IMPORTED = 3
+    JOB_TRANSCODING = 4
+    JOB_TRANSCODED = 5
+    JOB_EXPORTING = 6
+    JOB_SUCCEEDED = 7                   # if status >= 7: job has finished
+    JOB_IMPORT_FAILED = 8
+    JOB_TRANSCODING_FAILED = 9
+    JOB_EXPORT_FAILED = 10
+    
+    def __init__(self, username, password, server=None, ssl = False):
+        """ Constructor for RatsService, used to send request to the RATS service.
+
+        :param username: Name of your Rambla user account
+        :param password: Pwd of your Rambla user account
+        :param server: Domain name of the RATS service (optional, default = "rats.enc01.rambla.be")
+        :param ssl: Set True to use SSL (your account must be SSL enabled) (optional, default = False)
+        """
         self.username = username
+        if server is None:
+            server = "rats.enc01.rambla.be"
         super(RatsService, self).__init__(username = username, password = password, server = server, ssl = ssl)
 
     def delete(self, uri):

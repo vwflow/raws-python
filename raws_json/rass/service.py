@@ -20,7 +20,14 @@ from raws_json.raws_service import RawsService, Feed, Query, RequestError
 
 class RassService(RawsService):
 
-    def __init__(self, username=None, password=None, server=None, ssl = False):
+    def __init__(self, username, password, server, ssl = False):
+        """ Constructor for RassService, used to send request to the RASS service.
+
+        :param username: Name of your Rambla user account
+        :param password: Pwd of your Rambla user account
+        :param server: Domain name of the RASS service (either 'rass.cdn01.rambla.be' or 'rass.cdn02.rambla.be', depending on the subCDN you're using)
+        :param ssl: Set True to use SSL (your account must be SSL enabled) (optional, default = False)
+        """
         self.username = username
         super(RassService, self).__init__(username = username, password = password, server = server, ssl = ssl)
 
