@@ -79,19 +79,23 @@ class RatsService(RawsService):
         """
         params = {}
 
+        if format and formatgroup:
+            raise Exception("Invalid parameters passed to createJob(): both format and formatgroup were set. These can not be combined!")
         if format:
             params["format"] = format
         elif formatgroup:
             params["formatgroup"] = formatgroup
         else:
-            raise Exception("Can't create a job without a format or formatgroup ID.")
+            raise Exception("Invalid parameters passed to createJob(): can't create a job without a format or formatgroup ID.")
 
+        if src_location and import_location:
+            raise Exception("Invalid parameters passed to createJob(): both format and input_location were set. These can not be combined!")
         if src_location:
             params["src_location"] = src_location
         elif import_location:
             params["import_location"] = import_location
         else:
-            raise Exception("Can't create a job without a src_location or import_location.")
+            raise Exception("Invalid parameters passed to createJob(): can't create a job without a src_location or input_location.")
         
         if input:
             params["input"] = input

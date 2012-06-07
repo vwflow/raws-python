@@ -66,11 +66,8 @@ class RassService(RawsService):
         """
         uri = "/item/" + dirpath.lstrip("/")
         media_source = raws_json.MediaSource(file_path = local_path, svr_filename = filename)
-        if force_create: # do POST
-            media_entry = self.Post(data = None, uri = uri, media_source = media_source)
-        else:
-            uri = uri.rstrip("/") + "/" + filename # PUT requires filename to be part of the URL path
-            media_entry = self.Put(data = None, uri = uri, media_source = media_source)
+        media_entry = self.Post(data = None, uri = uri, media_source = media_source)
+        # media_entry = self.Put(data = None, uri = uri, media_source = media_source)
         return media_entry
 
     def itemExists(self, path):
@@ -166,7 +163,7 @@ class RassService(RawsService):
         """ Sends a GET meta request with the given path.
         
             @param string Relative path to a file or directory (pass "/" for root-directory) on the CDN
-            @return single meta object
+            @return single meta object or list of meta objects
         """
         uri = "/meta/" + self.username + "/" + path.lstrip("/")
         if query:

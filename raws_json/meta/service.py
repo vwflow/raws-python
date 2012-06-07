@@ -290,6 +290,7 @@ class MetaService(RawsService):
         """ Retrieves a ext list in json. 
 
             @param query raws_json.Query object that contains queryset args.
+            @param bool If true, an RTMP playlists is being returned.
             @return List of content dicts (virtual or real).
         """
         uri = "/ext/mrss/" + self.username + "/"
