@@ -35,23 +35,23 @@ try:
 
     # create a dir on the CDN
     dir = rass.createDir("crud_test/", True)
-    print "Created dir with relative path = '%s'" % dir["entry"]["attrs"]["path"]
+    print "Created dir with relative path = '%s'" % dir["entry"]["content"]["params"]["path"]
 
     # upload a file to a sub-directory (which will be created if it doesn't exist)
     item = rass.createItem("crud_test/subdir/", "filename.mp4", LOCAL_FILE)
-    print "Created item with relative path = '%s' and size = %s" % (item["entry"]["attrs"]["path"], dir["entry"]["content"]["params"]["size"])
+    print "Created item with relative path = '%s' and size = %s" % (item["entry"]["content"]["params"]["path"], dir["entry"]["content"]["params"]["size"])
     
     # get list of all files in "crud_test/subdir/"
     print "Getting a list of all files in 'crud_test/subdir/' ..."
     feed = rass.getDirList(path = "crud_test/subdir/", query = Query(params = {"kind":"file"}))
     feed_obj = Feed(feed)
     for item in feed_obj.entries:
-        print ".. found file with path = '%s', item instance url = %s" % (item["entry"]["attrs"]["path"], item["entry"]["id"])
+        print ".. found file with path = '%s', item instance url = %s" % (item["entry"]["content"]["params"]["path"], item["entry"]["id"])
         
     # check if file exists
-    if rass.itemExists(item["entry"]["attrs"]["path"]):
+    if rass.itemExists(item["entry"]["content"]["params"]["path"]):
         # delete file from CDN
-        rass.deleteItem(item["entry"]["attrs"]["path"])
+        rass.deleteItem(item["entry"]["content"]["params"]["path"])
 
     # check if dir exists
     if rass.dirExists("crud_test/"):

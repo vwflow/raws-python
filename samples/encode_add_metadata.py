@@ -20,6 +20,7 @@
     If you have YouTube syncing enabled (default = disabled), the media file will also be uploaded to YouTube and the metadata will be synced.
     Warning: when the metadata are synced, the YouTube video will become publicly available.
     
+    Note: to run this sample, you must have metadata support + YouTube syncing turned on for your user account (contact support@rambla.be for more info).
     Before running this sample, you must set your Rambla user account credentials and the path to a local video file (to be encoded) in the settings below.
 """
 USER = 'xxx' # add Rambla user account name

@@ -49,31 +49,31 @@ try:
     print "Created item instance : %s " % item3["entry"]["id"]
 
     # Create content instance for "meta_sample/elephants_dream.mp4" + "meta_sample/elephants_dream.jpg"
-    print "Adding metadata for video file = '%s' ..." % item1["entry"]["attrs"]["path"]
+    print "Adding metadata for video file = '%s' ..." % item1["entry"]["content"]["params"]["path"]
     content_obj = MetaContent(name = "elephants_dream")
-    content_obj.add_file_objs([FileObj(path = item1["entry"]["attrs"]["path"]), FileObj(path = item1b["entry"]["attrs"]["path"])])
+    content_obj.add_file_objs([FileObj(path = item1["entry"]["content"]["params"]["path"]), FileObj(path = item1b["entry"]["content"]["params"]["path"])])
     content_obj.add_tags(["Blender", "elephant", "animation"])
     content1 = meta.createContent(content_obj.to_entry())
     print ".. created content instance : %s " % content1["entry"]["id"]
 
     # Create content instance with multiple languages for "meta_sample/big_buck_bunny.mp4"
-    print "Adding metadata for video file = '%s'" % item2["entry"]["attrs"]["path"]
+    print "Adding metadata for video file = '%s'" % item2["entry"]["content"]["params"]["path"]
     content_obj = MetaContent(name = "big_buck_bunny")
-    content_obj.add_file_obj(FileObj(path = item2["entry"]["attrs"]["path"]))
+    content_obj.add_file_obj(FileObj(path = item2["entry"]["content"]["params"]["path"]))
     content_obj.add_tags(["Blender", "bunny", "animation"])
     content2 = meta.createContent(content_obj.to_entry())
     print ".. created content instance : %s " % content2["entry"]["id"]
 
     # Create content instance without meta objects for "meta_sample/sintel.mp4"
-    print "Creating content object without meta objects for video file = '%s'" % item3["entry"]["attrs"]["path"]
+    print "Creating content object without meta objects for video file = '%s'" % item3["entry"]["content"]["params"]["path"]
     content_obj = MetaContent(name = "sintel")
-    content_obj.add_file_obj(FileObj(path = item3["entry"]["attrs"]["path"]))
+    content_obj.add_file_obj(FileObj(path = item3["entry"]["content"]["params"]["path"]))
     content_obj.add_tag("Blender")
     content3 = meta.createContent(content_obj.to_entry())
     print ".. created content instance : %s " % content3["entry"]["id"]
 
     # Update content instance, adding meta objects
-    print "Updating content object with meta objects for video file = '%s'" % item3["entry"]["attrs"]["path"]
+    print "Updating content object with meta objects for video file = '%s'" % item3["entry"]["content"]["params"]["path"]
     content_obj = MetaContent(entry = content3)
     content_obj.add_tags(["sintel", "animation"])
     content3 = meta.updateContent(content_obj.to_entry())
