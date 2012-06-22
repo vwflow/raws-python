@@ -490,6 +490,26 @@ class RawsService(raws_json.JsonService):
           raise RequestError, {'status': server_response.status,
               'reason': server_response.reason, 'body': result_body}
 
+    def PostTxtFile(self, uri, data, filename, extra_headers=None, url_params=None, escape_params=True, redirects_remaining=4):
+        """ POST data content to URI and set filename as SLUG """
+        if extra_headers is None:
+            extra_headers = {"Accept":"application/json"}
+        else:
+            extra_headers.update({"Accept":"application/json"})
+
+        extra_headers['Content-Length'] = str(len(data))
+        extra_headers['Slug'] = str(filename)
+        content_type = 'application/data'
+        server_response = self.handler.HttpRequest(self, "POST", data, uri, extra_headers=extra_headers, url_params=url_params, escape_params=escape_params,
+                                                  content_type=content_type)
+        result_body = server_response.read()
+        # Server returns 201 for most post requests, but when performing a batch
+        # request the server responds with a 200 on success.
+        if server_response.status == 201 or server_response.status == 200:
+            return json.loads(result_body)
+        else:
+            raise RequestError, {'status': server_response.status, 'reason': server_response.reason, 'body': result_body}
+
 
 class Query(dict):
   """Constructs a query URL to be used in GET requests

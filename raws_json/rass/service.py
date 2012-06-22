@@ -59,15 +59,26 @@ class RassService(RawsService):
         """ Creates a new RASS item resource by uploading a file (= a file on the CDN). 
 
             @param string dirpath : path to the directory (on the rambla CDN) in which the item needs to be created.
-            @param string filename : proposed filename to be used when storing the file (RASS will append a suffix if file already exists on CDN and force_create == True).
+            @param string filename : proposed filename to be used when storing the file (RASS will append a suffix if file already exists on CDN).
             @param string local_path : location of the file to be uploaded on the local machine
-            @param bool force_create : If True, append suffix to filename if file already exists. If False, return HTTP error if already exists.
+            @param bool force_create : Not used.
             @return item object (= result of json.decode(response_body))
         """
         uri = "/item/" + dirpath.lstrip("/")
         media_source = raws_json.MediaSource(file_path = local_path, svr_filename = filename)
         media_entry = self.Post(data = None, uri = uri, media_source = media_source)
-        # media_entry = self.Put(data = None, uri = uri, media_source = media_source)
+        return media_entry
+        
+    def createItemFromString(self, dirpath, filename, data):
+        """ Creates a text file, using a string as input.
+        
+            @param string dirpath : path to the directory (on the rambla CDN) in which the item needs to be created.
+            @param string filename : proposed filename to be used when storing the file (RASS will append a suffix if file already exists on CDN and force_create == True).
+            @param string data : (textual) file content
+            @return item object (= result of json.decode(response_body))
+        """
+        uri = "/item/" + dirpath.lstrip("/")
+        media_entry = self.PostTxtFile(data = data, uri = uri, filename = filename)
         return media_entry
 
     def itemExists(self, path):
