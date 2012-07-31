@@ -55,7 +55,7 @@ class RassService(RawsService):
     # ITEM METHODS
     # -----------
 
-    def createItem(self, dirpath, filename, local_path, force_create = True):
+    def createItem(self, dirpath, filename, local_path, force_create = True, replace_existing = False):
         """ Creates a new RASS item resource by uploading a file (= a file on the CDN). 
 
             @param string dirpath : path to the directory (on the rambla CDN) in which the item needs to be created.
@@ -65,11 +65,13 @@ class RassService(RawsService):
             @return item object (= result of json.decode(response_body))
         """
         uri = "/item/" + dirpath.lstrip("/")
+        if replace_existing:
+            uri = uri + "?" + "replace=1"
         media_source = raws_json.MediaSource(file_path = local_path, svr_filename = filename)
         media_entry = self.Post(data = None, uri = uri, media_source = media_source)
         return media_entry
         
-    def createItemFromString(self, dirpath, filename, data):
+    def createItemFromString(self, dirpath, filename, data, replace_existing = False):
         """ Creates a text file, using a string as input.
         
             @param string dirpath : path to the directory (on the rambla CDN) in which the item needs to be created.
@@ -78,6 +80,8 @@ class RassService(RawsService):
             @return item object (= result of json.decode(response_body))
         """
         uri = "/item/" + dirpath.lstrip("/")
+        if replace_existing:
+            uri = uri + "?" + "replace=1"
         media_entry = self.PostTxtFile(data = data, uri = uri, filename = filename)
         return media_entry
 
