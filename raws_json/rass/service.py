@@ -158,15 +158,25 @@ class RassService(RawsService):
             uri = query.ToUri()
         return self.Get(uri = uri)
 
-    def deleteDir(self, path, recursive = False):
-        """ Deletes a RASS item (file on the CDN + RASS resource attached to it)
+    def deleteDir(self, path, recursive = False, files_only = False):
+        """ Deletes a RASS dir (directory on the CDN)
+
+            By default, the directory will only be deleted if it is empty.
+            To change this behaviour, pass True in the recursive argument.
 
             @param string: relative path to the file on the cdn
+            @param boolean: delete the directory and all its files/subdirs
+            @param boolean: only delete all files located in the directory, not the directory itself of its sub-directories.
         """
         uri = "/dir/" + path.lstrip("/")
         if recursive:
             query = Query()
             query["recursive"] = "1"
+            query.feed = uri
+            uri = query.ToUri()
+        elif files_only:
+            query = Query()
+            query["files_only"] = "1"
             query.feed = uri
             uri = query.ToUri()
         return self.delete(uri)
