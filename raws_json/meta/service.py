@@ -130,7 +130,7 @@ class MetaService(RawsService):
             uri = query.ToUri()
         return self.Get(uri = uri)
 
-    def deleteContentDir(self, dirpath = None, not_if_exists = False):
+    def deleteContentDir(self, dirpath = None, delete_from_cdn = False, delete_files_only = False):
         """ Delete (recursively) all META file or/and content instances that are located under a given directory.
         
             This method deletes all file instances from inside this directory and sub-directories.
@@ -141,9 +141,13 @@ class MetaService(RawsService):
             @param bool If True, the META service will only delete file/content instances if the directory doesn't exist on the CDN.
         """
         uri = "/contentdir/" + self.username + "/" + dirpath.lstrip("/")
-        if not_if_exists:
+        if not delete_from_cdn or delete_files_only:
             query = Query()
-            query["check_cdn"] = "1"
+            query.feed = uri
+            if not delete_from_cdn:
+                query["delete_from_cdn"] = "0"
+            if delete_files_only:
+                query["delete_files_only"] = "1"
             uri = query.ToUri()
         return self.Delete(uri = uri)
 
