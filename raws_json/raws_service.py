@@ -510,6 +510,15 @@ class RawsService(raws_json.JsonService):
         else:
             raise RequestError, {'status': server_response.status, 'reason': server_response.reason, 'body': result_body}
 
+    def get_enclosure_link(self, entry):
+        url = None
+        for link in entry["entry"]["link"]:
+            if link.has_key("rel"):
+                if "enclosure" == link["rel"]:
+                    url = link["href"]
+                    break
+        return url
+
 
 class Query(dict):
   """Constructs a query URL to be used in GET requests
@@ -566,4 +575,5 @@ class Query(dict):
 
   def __str__(self):
       return self.ToUri()
+
 
