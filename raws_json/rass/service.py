@@ -213,6 +213,11 @@ class RassService(RawsService):
         return self.get_meta_info(path, query)
         
 
-
+    def move(self, old, new, key):
+        params = {"old_path":old, "new_path":new, "key":key}
+        entry = {"entry":{"content":{"params":params},},}
+        uri = "/move/%s/" % self.username
+        return self.Post(entry, uri= uri)
+        
         
 
