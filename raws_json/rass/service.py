@@ -218,6 +218,12 @@ class RassService(RawsService):
         entry = {"entry":{"content":{"params":params},},}
         uri = "/move/%s/" % self.username
         return self.Post(entry, uri= uri)
+
+    def copy(self, old, new, key):
+        params = {"old_path":old, "new_path":new, "key":key}
+        entry = {"entry":{"content":{"params":params},},}
+        uri = "/copy/%s/" % self.username
+        return self.Post(entry, uri= uri)
         
         
 
