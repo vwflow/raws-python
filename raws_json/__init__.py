@@ -398,8 +398,8 @@ def __CalculateDataLength(data):
       return len(data)
     elif isinstance(data, list):
       return None
-    elif ElementTree.iselement(data):
-      return len(ElementTree.tostring(data))
+    # elif ElementTree.iselement(data):
+    #   return len(ElementTree.tostring(data))
     elif hasattr(data, 'read'):
       # If this is a file-like object, don't try to guess the length.
       return None
