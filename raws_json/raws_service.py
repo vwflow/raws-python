@@ -187,7 +187,7 @@ class RawsService(raws_json.JsonService):
         result_body = server_response.read()
 
         if server_response.status == 200:
-            return json.loads(s = result_body, parse_int = True, parse_float = True)
+            return json.loads(s = result_body)
         else:
           raise RequestError, {'status': server_response.status,
               'reason': server_response.reason, 'body': result_body}
