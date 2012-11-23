@@ -415,7 +415,7 @@ class MetaContent(object):
             True if file_objs are the same.
         """
         if len(self.file_objs) != len(file_objs):
-            print "len fault"
+            print "different number of file objs in both MetaContent objs"
             return False
         for f in self.file_objs:
             found_equal_path = False
