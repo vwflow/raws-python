@@ -362,8 +362,11 @@ def HttpRequest(service, operation, data, uri, extra_headers=None,
 
 def __SendDataPart(data, connection):
     if isinstance(data, str):
-      #TODO add handling for unicode.
       connection.send(data)
+      return
+    elif isinstance(data, unicode):
+      # unicode string must be converted into 8-bit string version (otherwise httplib will raise UnicodeDecodeError)
+      connection.send(data.encode('utf-8'))
       return
     # NEXT SECTION COMMENTED OUT, replace by json.decode() if desired
     # elif ElementTree.iselement(data):
