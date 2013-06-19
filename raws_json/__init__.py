@@ -399,6 +399,8 @@ def __CalculateDataLength(data):
     """
     if isinstance(data, str):
       return len(data)
+    elif isinstance(data, unicode):
+      return len(data.decode('utf-8'))
     elif isinstance(data, list):
       return None
     # elif ElementTree.iselement(data):
