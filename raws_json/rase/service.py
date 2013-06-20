@@ -47,3 +47,14 @@ class RaseService(RawsService):
         print entry
         print uri
         return self.Post(entry, uri= uri)
+
+    def getWowapps(self, query = None):
+        """ Retrieves a total feed. 
+
+            @return Wowapp feed object
+        """
+        uri = "/wowapp/"
+        if query:
+            query.feed = uri
+            uri = query.ToUri()
+        return self.Get(uri = uri)
