@@ -66,3 +66,12 @@ class RaseService(RawsService):
             @return List of Mpegts dicts or Mpegts entry dict
         """
         return self.Get(uri = uri)
+        
+    def mkMpegtsConfig(self, entry):
+        uri = "/mpegtsconf/"
+        return self.Post(entry, uri= uri)
+        
+    def rmMpegtsConfig(self, username, webcast_id):
+        uri = "/mpegtsconf/%s/%s/" % (username, webcast_id)
+        return self.Delete(uri = uri)
+        
