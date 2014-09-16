@@ -58,3 +58,11 @@ class RaseService(RawsService):
             query.feed = uri
             uri = query.ToUri()
         return self.Get(uri = uri)
+
+    def getMpegts(self, uri):
+        """ Retrieves a Mpegts instance or list (depending on the URI). 
+
+            @param uri GET Mpegts URL for your user account.
+            @return List of Mpegts dicts or Mpegts entry dict
+        """
+        return self.Get(uri = uri)
