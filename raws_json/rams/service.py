@@ -47,3 +47,25 @@ class RamsService(RawsService):
             query.feed = uri
             uri = query.ToUri()
         return self.Get(uri = uri)
+
+    def getTraffic(self, query = None):
+        """ Retrieves a total feed. 
+
+            @return JobEntry object
+        """
+        uri = "/traffic/"
+        if query:
+            query.feed = uri
+            uri = query.ToUri()
+        return self.Get(uri = uri)
+
+    def getStorage(self, query = None):
+        """ Retrieves a total feed. 
+
+            @return JobEntry object
+        """
+        uri = "/storage/"
+        if query:
+            query.feed = uri
+            uri = query.ToUri()
+        return self.Get(uri = uri)
