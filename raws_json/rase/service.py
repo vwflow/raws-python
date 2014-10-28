@@ -36,13 +36,16 @@ class RaseService(RawsService):
         return self.Delete(uri = uri)
 
 
-    def setTransrate(self, user, top_format, formats):
+    def setTransrate(self, user, top_format, formats, audio_codec = None):
         """ Tries to POST a new vocab resource to META, in order to update the entry that was passed as argument.
 
             @param dict The (modified) vocab entry dict, that will be posted to META.
             @return Vocab entry dict
         """
-        entry = {"entry":{"content":{ "params": {"user": user, "top_format": top_format,}, "formats" : formats},},}
+        audio_codec_req = "PassThru"
+        if audio_codec is not None:
+            audio_codec_req = audio_codec
+        entry = {"entry":{"content":{ "params": {"user": user, "top_format": top_format,}, "formats" : formats, "audio_codec" : audio_codec_req},},}
         uri = "/transrate/" + user + "/"
         print entry
         print uri
