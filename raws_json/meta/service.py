@@ -312,3 +312,13 @@ class MetaService(RawsService):
         else:
             raise RequestError, {'status': server_response.status,
               'reason': server_response.reason, 'body': result_body}
+
+
+    def getWebcastInstance(self, id):
+        """ Retrieves a vocab entry with name passed in the argument. 
+
+            @param string Name of the vocab instance to be retrieved.
+            @return Vocab entry dict
+        """
+        uri = "/webcast/%s/%s/" % (self.username, id)
+        return self.Get(uri = uri)
